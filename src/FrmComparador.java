@@ -10,6 +10,7 @@
  */
 import java.util.ArrayList;
 import java.util.Random;
+import java.util.Collections;
 
 public class FrmComparador extends javax.swing.JFrame {
     private ArrayList<Integer> listaNumeros = new ArrayList<>();
@@ -123,6 +124,66 @@ public class FrmComparador extends javax.swing.JFrame {
 
         return resultado;
     }
+    
+    private ArrayList<Integer> mezclaEquilibradaMultiple(ArrayList<Integer> lista) {
+        int pasos = 0;
+        txtResultados.append("\nIniciando Mezcla Equilibrada Múltiple...\n");
+
+        int partes = 3; 
+        ArrayList<ArrayList<Integer>> segmentos = new ArrayList<>();
+
+        int tam = lista.size() / partes;
+        for (int i = 0; i < lista.size(); i += tam) {
+            int fin = Math.min(i + tam, lista.size());
+            ArrayList<Integer> sublista = new ArrayList<>(lista.subList(i, fin));
+            Collections.sort(sublista);
+            segmentos.add(sublista);
+            txtResultados.append("Segmento ordenado: " + sublista + "\n");
+            pasos++;
+        }
+
+        ArrayList<Integer> resultado = new ArrayList<>();
+        for (ArrayList<Integer> seg : segmentos) {
+            resultado.addAll(seg);
+            pasos++;
+        }
+        Collections.sort(resultado);
+
+        txtResultados.append("Resultado final: " + resultado + "\n");
+        txtResultados.append("Pasos realizados: " + pasos + "\n");
+        return resultado;
+    }
+    
+    private ArrayList<Integer> metodoPolifasico(ArrayList<Integer> lista) {
+        int pasos = 0;
+        txtResultados.append("\nIniciando Método Polifásico...\n");
+
+        ArrayList<ArrayList<Integer>> runs = new ArrayList<>();
+
+        int i = 0;
+        while (i < lista.size()) {
+            int tamCorrida = Math.min((i % 5) + 3, lista.size() - i); 
+            ArrayList<Integer> corrida = new ArrayList<>(lista.subList(i, i + tamCorrida));
+            Collections.sort(corrida);
+            runs.add(corrida);
+            txtResultados.append("Corrida creada: " + corrida + "\n");
+            pasos++;
+            i += tamCorrida;
+        }
+
+        while (runs.size() > 1) {
+            ArrayList<Integer> a = runs.remove(0);
+            ArrayList<Integer> b = runs.remove(0);
+            ArrayList<Integer> fusion = fusionarMezcla(a, b); 
+            txtResultados.append("Fusionando: " + a + " + " + b + " => " + fusion + "\n");
+            runs.add(fusion);
+            pasos++;
+        }
+
+        txtResultados.append("Resultado final: " + runs.get(0) + "\n");
+        txtResultados.append("Pasos realizados: " + pasos + "\n");
+        return runs.get(0);
+    }
 
     /**
      * Creates new form FrmComparador
@@ -146,6 +207,9 @@ public class FrmComparador extends javax.swing.JFrame {
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtResultados = new javax.swing.JTextArea();
+        btnEquilibrada = new javax.swing.JButton();
+        btnPolifasico = new javax.swing.JButton();
+        jLabel2 = new javax.swing.JLabel();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -156,14 +220,14 @@ public class FrmComparador extends javax.swing.JFrame {
             }
         });
 
-        btnMezcla.setText("Ordenar con Mezcla Directa");
+        btnMezcla.setText("Mezcla Directa");
         btnMezcla.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnMezclaActionPerformed(evt);
             }
         });
 
-        btnFusion.setText("Ordenar con Fusión Natural");
+        btnFusion.setText("Fusión Natural");
         btnFusion.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btnFusionActionPerformed(evt);
@@ -177,42 +241,70 @@ public class FrmComparador extends javax.swing.JFrame {
         txtResultados.setRows(5);
         jScrollPane1.setViewportView(txtResultados);
 
+        btnEquilibrada.setText("Mezcla Equilibrada Múltiple");
+
+        btnPolifasico.setText("Método Polifásico");
+
+        jLabel2.setText("Ordenar con:");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel1)
-                .addGap(196, 196, 196))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(186, 186, 186)
-                .addComponent(btnCargar)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addGap(51, 51, 51)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jScrollPane1)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnMezcla)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
-                        .addComponent(btnFusion)))
-                .addGap(56, 56, 56))
+                        .addComponent(jScrollPane1)
+                        .addGap(56, 56, 56))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(62, 62, 62)
+                                .addComponent(btnEquilibrada)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 77, Short.MAX_VALUE)
+                                .addComponent(btnPolifasico))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(0, 0, Short.MAX_VALUE)
+                                .addComponent(btnMezcla)
+                                .addGap(120, 120, 120)
+                                .addComponent(btnFusion)
+                                .addGap(8, 8, 8)))
+                        .addGap(140, 140, 140))))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel1)
+                .addGap(233, 233, 233))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(230, 230, 230)
+                        .addComponent(btnCargar))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(286, 286, 286)
+                        .addComponent(jLabel2)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(22, 22, 22)
                 .addComponent(btnCargar)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addGap(18, 18, 18)
+                .addComponent(jLabel2)
+                .addGap(11, 11, 11)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnMezcla)
-                    .addComponent(btnFusion))
-                .addGap(45, 45, 45)
+                    .addComponent(btnFusion)
+                    .addComponent(btnMezcla))
+                .addGap(30, 30, 30)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(btnEquilibrada)
+                    .addComponent(btnPolifasico))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 35, Short.MAX_VALUE)
                 .addComponent(jLabel1)
-                .addGap(28, 28, 28)
+                .addGap(29, 29, 29)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 226, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(37, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -297,9 +389,12 @@ public class FrmComparador extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnCargar;
+    private javax.swing.JButton btnEquilibrada;
     private javax.swing.JButton btnFusion;
     private javax.swing.JButton btnMezcla;
+    private javax.swing.JButton btnPolifasico;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTextArea txtResultados;
     // End of variables declaration//GEN-END:variables
