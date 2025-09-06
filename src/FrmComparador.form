@@ -146,11 +146,17 @@
       <Properties>
         <Property name="text" type="java.lang.String" value="Mezcla Equilibrada M&#xfa;ltiple"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnEquilibradaActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="btnPolifasico">
       <Properties>
         <Property name="text" type="java.lang.String" value="M&#xe9;todo Polif&#xe1;sico"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPolifasicoActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JLabel" name="jLabel2">
       <Properties>

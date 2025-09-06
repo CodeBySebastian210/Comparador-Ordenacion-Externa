@@ -242,8 +242,18 @@ public class FrmComparador extends javax.swing.JFrame {
         jScrollPane1.setViewportView(txtResultados);
 
         btnEquilibrada.setText("Mezcla Equilibrada Múltiple");
+        btnEquilibrada.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnEquilibradaActionPerformed(evt);
+            }
+        });
 
         btnPolifasico.setText("Método Polifásico");
+        btnPolifasico.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnPolifasicoActionPerformed(evt);
+            }
+        });
 
         jLabel2.setText("Ordenar con:");
 
@@ -351,6 +361,34 @@ public class FrmComparador extends javax.swing.JFrame {
 
         mostrarResultado("Fusión Natural", (fin - inicio), pasosFusion, resultado);
     }//GEN-LAST:event_btnFusionActionPerformed
+
+    private void btnEquilibradaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEquilibradaActionPerformed
+        // TODO add your handling code here                                           
+            if (listaNumeros.isEmpty()) {
+                txtResultados.setText("Primero cargue los números aleatorios.\n");
+                return;
+            }
+
+            long inicio = System.currentTimeMillis();
+            ArrayList<Integer> resultado = mezclaEquilibradaMultiple(new ArrayList<>(listaNumeros));
+            long fin = System.currentTimeMillis();
+
+            txtResultados.append("Tiempo de ejecución: " + (fin - inicio) + " ms\n");
+    }//GEN-LAST:event_btnEquilibradaActionPerformed
+
+    private void btnPolifasicoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPolifasicoActionPerformed
+        // TODO add your handling code here:
+        if (listaNumeros.isEmpty()) {
+            txtResultados.setText("Primero cargue los números aleatorios.\n");
+            return;
+        }
+
+        long inicio = System.currentTimeMillis();
+        ArrayList<Integer> resultado = metodoPolifasico(new ArrayList<>(listaNumeros));
+        long fin = System.currentTimeMillis();
+
+        txtResultados.append("Tiempo de ejecución: " + (fin - inicio) + " ms\n");
+    }//GEN-LAST:event_btnPolifasicoActionPerformed
 
     /**
      * @param args the command line arguments
